@@ -12,20 +12,29 @@ typedef enum {
     NODE_FOR_STMT,
     NODE_WHILE_STMT,
     NODE_RETURN_STMT,
+    NODE_IDENTIFIER,
+    NODE_NUMBER,
+    NODE_STRING,
     NODE_EXPR
 } NodeType;
+
+typedef enum {
+    SYM_FUNCTION,
+    SYM_VARIABLE
+} SymbolKind;
 
 typedef struct ASTNode {
     NodeType type;
     int line;
     int col;
+    int end_line;
+    int end_col;
     union {
         struct {
             char* name;
             char** params;
             int param_count;
-            struct ASTNode** body;
-            int body_count;
+            struct ASTNode* body;
         } func_def;
         struct {
             char* name;
@@ -36,47 +45,71 @@ typedef struct ASTNode {
         } roar;
         struct {
             struct ASTNode* cond;
-            struct ASTNode** then_body;
-            int then_count;
-            struct ASTNode** else_body;
-            int else_count;
+            struct ASTNode* then_body;
+            struct ASTNode* else_body;
         } if_stmt;
         struct {
             char* var;
             struct ASTNode* start;
             struct ASTNode* end;
-            struct ASTNode** body;
-            int body_count;
+            struct ASTNode* body;
         } for_stmt;
         struct {
             struct ASTNode* cond;
-            struct ASTNode** body;
-            int body_count;
+            struct ASTNode* body;
         } while_stmt;
         struct {
             struct ASTNode* expr;
         } ret;
         struct {
+            char* name;
+        } identifier;
+        struct {
+            double value;
+        } number;
+        struct {
+            char* value;
+        } string;
+        struct {
             char* op;
             struct ASTNode* left;
             struct ASTNode* right;
         } expr;
+        struct {
+            struct ASTNode** statements;
+            int statement_count;
+        } program;
     };
 } ASTNode;
 
-typedef struct Symbol {
-    char* name;
-    char* kind; // "function" or "variable"
+typedef struct Usage {
     int line;
     int col;
-    ASTNode* node;
+} Usage;
+
+typedef struct Symbol {
+    char* name;
+    SymbolKind kind;
+    int line;
+    int col;
+    Usage* usages;
+    int usage_count;
+    int usage_cap;
     struct Symbol* next;
 } Symbol;
+
+typedef struct ParseError {
+    int line;
+    int col;
+    char* message;
+} ParseError;
 
 typedef struct {
     ASTNode* root;
     Symbol* symbols;
     int symbol_count;
+    ParseError* errors;
+    int error_count;
     char* source;
     size_t source_len;
 } ParseResult;
@@ -84,5 +117,6 @@ typedef struct {
 ParseResult parse_lynx(const char* source, size_t length);
 void free_ast(ASTNode* node);
 void free_symbols(Symbol* sym);
+void free_parse_result(ParseResult* result);
 
 #endif
