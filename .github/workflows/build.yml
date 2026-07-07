@@ -1,0 +1,30 @@
+name: Build Lynx-LSP
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install build dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y build-essential gcc make
+
+      - name: Build Lynx-LSP
+        run: make
+
+      - name: Upload binary
+        uses: actions/upload-artifact@v4
+        with:
+          name: lynx-lsp
+          path: lynx-lsp
