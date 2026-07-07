@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -O2 -Iinclude -Isrc
+CFLAGS = -Wall -Wextra -O2 -Isrc
 LDFLAGS = -lm
 
 SRC = src/main.c src/lsp.c src/parser.c src/json.c
