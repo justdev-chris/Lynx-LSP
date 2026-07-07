@@ -1,30 +1,24 @@
-name: Build Lynx-LSP
+name: Build Lynx-LSP (Windows)
 
 on:
   push:
-    branches: [ main, master ]
-  pull_request:
     branches: [ main, master ]
   workflow_dispatch:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install build dependencies
-        run: |
-          sudo apt update
-          sudo apt install -y build-essential gcc make
-
       - name: Build Lynx-LSP
-        run: make
+        run: |
+          gcc -Wall -Wextra -O2 -Isrc src/*.c -o lynx-lsp.exe -lm
 
-      - name: Upload binary
+      - name: Upload EXE
         uses: actions/upload-artifact@v4
         with:
-          name: lynx-lsp
-          path: lynx-lsp
+          name: lynx-lsp-windows
+          path: lynx-lsp.exe
