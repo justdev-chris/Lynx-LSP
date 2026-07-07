@@ -1,6 +1,8 @@
 #ifndef JSON_H
 #define JSON_H
 
+#include <stddef.h>
+
 typedef enum {
     JSON_NULL,
     JSON_BOOL,
@@ -28,6 +30,7 @@ typedef struct json_pair {
 } json_pair;
 
 json_value* json_parse(const char* str);
+char* json_stringify(json_value* val);
 json_value* json_get_object(json_value* obj, const char* key);
 void json_free(json_value* val);
 
