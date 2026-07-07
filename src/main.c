@@ -1,14 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
 #include "lsp.h"
-
-#define BUFFER_SIZE 65536
 
 int main(int argc, char* argv[]) {
     if (argc > 1 && strcmp(argv[1], "--help") == 0) {
-        printf("🐱 Lynx-LSP v0.1.0\n");
+        printf("🐱 Lynx-LSP v1.0.0\n");
         printf("Language Server Protocol for Lynx\n\n");
         printf("Usage:\n");
         printf("  lynx-lsp --stdio    Run as LSP server\n");
@@ -18,7 +15,7 @@ int main(int argc, char* argv[]) {
     }
 
     if (argc > 1 && strcmp(argv[1], "--version") == 0) {
-        printf("Lynx-LSP 0.1.0\n");
+        printf("Lynx-LSP 1.0.0\n");
         return 0;
     }
 
@@ -27,7 +24,7 @@ int main(int argc, char* argv[]) {
         return 0;
     }
 
-    printf("🐱 Lynx-LSP v0.1.0\n");
+    printf("🐱 Lynx-LSP v1.0.0\n");
     printf("Run with --stdio to start LSP server, or --help for usage.\n");
     return 0;
 }
